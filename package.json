@@ -1,6 +1,8 @@
 {
-  "name": "project1",
+  "name": "fashion-e-commerce-store",
   "version": "0.1.0",
+  "description": "DRESS CODE - A Modern Fashion E-commerce Store",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
