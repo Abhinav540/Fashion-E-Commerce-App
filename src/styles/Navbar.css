@@ -1,0 +1,260 @@
+/* Navbar.css - Responsive with Cool Animations */
+
+.main-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1.2rem 2rem;
+  background: linear-gradient(135deg, #000000 0%, #ff6b6b 100%, #000000);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.main-nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: 500;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  position: relative;
+  letter-spacing: 0.5px;
+  overflow: hidden;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+}
+
+/* Animated background effect */
+.main-nav a::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+  z-index: -1;
+}
+
+.main-nav a:hover::before {
+  width: 200px;
+  height: 200px;
+}
+
+/* Bottom line indicator */
+.main-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ffffff, #ff6b6b);
+  transition: all 0.4s ease;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+
+.main-nav a:hover {
+  transform: translateY(-3px);
+  text-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+}
+
+.main-nav a:hover::after {
+  width: 80%;
+}
+
+.main-nav a.active,
+.main-nav a.active:hover {
+  background: rgba(255, 255, 255, 0.25);
+  font-weight: 700;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transform: scale(1.05);
+}
+
+.main-nav a.active::after {
+  width: 90%;
+  height: 4px;
+  background: linear-gradient(90deg, #ff6b6b, #ffffff, #ff6b6b);
+  box-shadow: 0 0 10px rgba(255, 107, 107, 0.8);
+}
+
+/* Mobile Menu Toggle Button */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  z-index: 1001;
+}
+
+.nav-toggle span {
+  width: 30px;
+  height: 3px;
+  background: #ffffff;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.nav-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translateY(11px);
+}
+
+.nav-toggle.active span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.nav-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translateY(-11px);
+}
+
+/* Tablet Styles */
+@media (max-width: 1024px) {
+  .main-nav {
+    gap: 1.5rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .main-nav a {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.2rem;
+  }
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .main-nav {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+  }
+
+  .nav-toggle {
+    display: flex;
+    position: relative;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100vh;
+    width: 70%;
+    max-width: 300px;
+    background: linear-gradient(135deg, #000000 0%, #ff6b6b 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    transition: right 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+
+  .nav-links.active {
+    right: 0;
+  }
+
+  .main-nav a {
+    width: 80%;
+    text-align: center;
+    padding: 1rem;
+    font-size: 1.1rem;
+    animation: slideInRight 0.5s ease-out backwards;
+  }
+
+  .main-nav a:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+
+  .main-nav a:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .main-nav a:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  .main-nav a:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+
+  .main-nav a:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .main-nav a:hover {
+    transform: scale(1.05);
+  }
+
+  .main-nav a::before {
+    display: none;
+  }
+
+  /* Overlay for mobile menu */
+  .nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+/* Small Mobile Styles */
+@media (max-width: 480px) {
+  .main-nav {
+    padding: 0.8rem 1rem;
+  }
+
+  .nav-links {
+    width: 80%;
+  }
+
+  .main-nav a {
+    font-size: 1rem;
+    padding: 0.8rem;
+  }
+
+  .nav-toggle span {
+    width: 25px;
+  }
+}
