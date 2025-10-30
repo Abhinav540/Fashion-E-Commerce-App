@@ -7,7 +7,7 @@ This project demonstrates a complete fashion shopping experience — from browsi
 
 ## 🖥️ Live Demo
 
-🚀 [View on Vercel](fashion-e-commerce-app-rop6-fk8ccnmbl-abhinav-ps-projects.vercel.app)  
+fashion-e-commerce-app-rop6-fk8ccnmbl-abhinav-ps-projects.vercel.app
 
 
 ---
