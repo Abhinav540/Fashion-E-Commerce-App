@@ -1,11 +1,9 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import '../styles/Login.css';
 
 function Login() {
-  const [users, setUsers] = useState([]);
   const [isSignup, setIsSignup] = useState(false);
-  const [loading, setLoading] = useState(true);
   
   const email = useRef();
   const pass = useRef();
@@ -14,31 +12,41 @@ function Login() {
   
   const navigate = useNavigate();
 
-  // Load users from JSON file
-  useEffect(() => {
-    fetch('/users.json')
-      .then(res => res.json())
-      .then(data => {
-        setUsers(data.users);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Error loading users:", err);
-        setLoading(false);
-      });
-  }, []);
-
-  // Save users to localStorage (since we can't modify JSON directly from frontend)
-  const saveUsers = (updatedUsers) => {
-    localStorage.setItem('appUsers', JSON.stringify(updatedUsers));
-    setUsers(updatedUsers);
-  };
-
-  // Get users from localStorage or initial state
-  const getUsers = () => {
-    const saved = localStorage.getItem('appUsers');
-    return saved ? JSON.parse(saved) : users;
-  };
+  // Hardcoded users for demo (no backend needed)
+  const DEMO_USERS = [
+    {
+      id: 1,
+      name: "John Doe",
+      username: "johndoe",
+      password: "john123",
+      email: "john@example.com",
+      image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.1.0&auto=format&fit=crop&w=500&q=60"
+    },
+    {
+      id: 2,
+      name: "Jane Smith",
+      username: "janesmith",
+      password: "jane123",
+      email: "jane@example.com",
+      image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.1.0&auto=format&fit=crop&w=500&q=60"
+    },
+    {
+      id: 3,
+      name: "ABC User",
+      username: "abc@gmail.com",
+      password: "abc123",
+      email: "abc@gmail.com",
+      image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.1.0&auto=format&fit=crop&w=500&q=60"
+    },
+    {
+      id: 4,
+      name: "Demo User",
+      username: "demo",
+      password: "demo123",
+      email: "demo@example.com",
+      image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.1.0&auto=format&fit=crop&w=500&q=60"
+    }
+  ];
 
   function handleLogin(e) {
     e.preventDefault();
@@ -46,16 +54,17 @@ function Login() {
     const password = pass.current.value;
 
     if (username === "" || password === "") {
-      window.alert("Please enter credentials");
+      alert("Please enter credentials");
       return;
     }
 
-    const allUsers = getUsers();
-    const user = allUsers.find(u => u.username === username && u.password === password);
+    // Check against hardcoded users
+    const user = DEMO_USERS.find(
+      (u) => u.username === username && u.password === password
+    );
 
     if (user) {
-      // Store logged in user info
-      localStorage.setItem('loggedInUser', JSON.stringify(user));
+      localStorage.setItem("loggedInUser", JSON.stringify(user));
       navigate("/home");
     } else {
       alert("Invalid username or password");
@@ -70,21 +79,20 @@ function Login() {
     const userImage = image.current.value;
 
     if (username === "" || password === "" || fullName === "") {
-      window.alert("Please fill all fields");
+      alert("Please fill all fields");
       return;
     }
 
-    const allUsers = getUsers();
-    
-    // Check if user already exists
-    if (allUsers.find(u => u.username === username)) {
-      alert("Username already exists");
+    // Check if username already exists
+    const existingUser = DEMO_USERS.find((u) => u.username === username);
+    if (existingUser) {
+      alert("Username already exists. Please use: demo / demo123");
       return;
     }
 
-    // Create new user
+    // Create new user and auto-login
     const newUser = {
-      id: allUsers.length + 1,
+      id: Date.now(),
       name: fullName,
       username: username,
       password: password,
@@ -92,19 +100,11 @@ function Login() {
       image: userImage || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.1.0&auto=format&fit=crop&w=500&q=60"
     };
 
-    const updatedUsers = [...allUsers, newUser];
-    saveUsers(updatedUsers);
-    
-    alert("Account created successfully! Please login.");
-    setIsSignup(false);
-    email.current.value = "";
-    pass.current.value = "";
-    name.current.value = "";
-    image.current.value = "";
-  }
-
-  if (loading) {
-    return <div className="login-container"><p>Loading...</p></div>;
+    // Add to demo users and log in
+    DEMO_USERS.push(newUser);
+    localStorage.setItem("loggedInUser", JSON.stringify(newUser));
+    alert("Account created successfully!");
+    navigate("/home");
   }
 
   return (
@@ -116,6 +116,12 @@ function Login() {
 
       <form className="login-form" onSubmit={isSignup ? handleSignup : handleLogin}>
         <h1>{isSignup ? "Create Account" : "Welcome Back"}</h1>
+        
+        {!isSignup && (
+          <p style={{color: '#ccc', fontSize: '0.85rem', marginBottom: '10px', textAlign: 'center'}}>
+            Demo: <strong>demo</strong> / <strong>demo123</strong>
+          </p>
+        )}
         
         {isSignup && (
           <input 
@@ -145,9 +151,7 @@ function Login() {
           />
         )}
         
-        <button type="submit">
-          {isSignup ? "Sign Up" : "Login"}
-        </button>
+        <button type="submit">{isSignup ? "Sign Up" : "Login"}</button>
 
         <p className="toggle-form">
           {isSignup ? "Already have an account? " : "Don't have an account? "}

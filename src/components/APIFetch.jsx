@@ -15,31 +15,30 @@ function APIFetch() {
       .then((data) => {
         console.log('API Response:', data); // Debug log
         
-        // Filter only fashion items: clothes, shoes, caps, etc.
-        const fashionKeywords = ['dress', 'cap', 'hat', 'shoe', 'sneaker', 'boot', 'jacket', 'shirt', 'pant', 'jean', 'coat', 'top', 'sleeve', 't-shirt', 'hoodie', 'sweater', 'skirt', 'shorts', 'sock', 'clothing', 'apparel', 'wear', 'cloth', 'fashion'];
-        // Exclude furniture and non-fashion items
-        const excludeKeywords = ['sofa', 'table', 'chair', 'armchair', 'dining', 'furniture', 'desk', 'cabinet', 'bed', 'couch', 'ottoman', 'bench', 'stool', 'shelf'];
+        // Exclude only unwanted categories - more flexible approach
+        const excludeKeywords = [
+          'bicycle', 'bike', 'cycle',
+          'laptop', 'computer', 'keyboard', 'monitor', 'electronics',
+          'sofa', 'table', 'chair', 'furniture', 'desk', 'cabinet', 'bed',
+          'toy', 'game', 'puzzle',
+          'book', 'novel', 'magazine',
+          'phone', 'tablet', 'camera'
+        ];
         
         const fashionItems = data.filter(item => {
           const title = item.title?.toLowerCase() || '';
           const description = item.description?.toLowerCase() || '';
           const category = item.category?.name?.toLowerCase() || '';
+          const combined = `${title} ${description} ${category}`;
           
-          // Check if item contains any excluded keywords
-          const isExcluded = excludeKeywords.some(keyword => 
-            title.includes(keyword) || description.includes(keyword) || category.includes(keyword)
-          );
+          // Exclude only specific unwanted items
+          const isExcluded = excludeKeywords.some(keyword => combined.includes(keyword));
           
-          // Check if item contains fashion keywords OR is in a clothing category
-          const isFashion = fashionKeywords.some(keyword => 
-            title.includes(keyword) || description.includes(keyword) || category.includes(keyword)
-          ) || category.includes('cloth') || category.includes('wear');
-          
-          return isFashion && !isExcluded;
+          return !isExcluded;
         });
         
-        console.log('Filtered Fashion Items:', fashionItems); // Debug log
-        setApi(fashionItems); // Only set fashion items
+        console.log('Filtered Fashion Items:', fashionItems.length, 'items'); // Debug log
+        setApi(fashionItems);
         setLoading(false);
       })
       .catch((error) => {

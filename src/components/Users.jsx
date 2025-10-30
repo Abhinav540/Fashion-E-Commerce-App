@@ -24,20 +24,7 @@ function Users() {
   useEffect(() => {
     const user = localStorage.getItem('loggedInUser');
     if (user) {
-      const parsedUser = JSON.parse(user);
-      setLoggedInUser(parsedUser);
-      
-      // Load user orders
-      const savedOrders = localStorage.getItem(`orders_${parsedUser.id}`);
-      if (savedOrders) {
-        setOrders(JSON.parse(savedOrders));
-      }
-
-      // Load user addresses
-      const savedAddresses = localStorage.getItem(`addresses_${parsedUser.id}`);
-      if (savedAddresses) {
-        setAddresses(JSON.parse(savedAddresses));
-      }
+      setLoggedInUser(JSON.parse(user));
     } else {
       navigate('/');
     }
@@ -50,16 +37,8 @@ function Users() {
     }
 
     const updatedUser = { ...loggedInUser, image: newImageUrl };
-    
-    // Update localStorage
-    localStorage.setItem('loggedInUser', JSON.stringify(updatedUser));
-    
-    // Update in users array
-    const allUsers = JSON.parse(localStorage.getItem('appUsers') || '[]');
-    const updatedUsers = allUsers.map(u => u.id === loggedInUser.id ? updatedUser : u);
-    localStorage.setItem('appUsers', JSON.stringify(updatedUsers));
-
     setLoggedInUser(updatedUser);
+    localStorage.setItem('loggedInUser', JSON.stringify(updatedUser));
     setEditingImage(false);
     setNewImageUrl("");
     alert("Profile image updated successfully!");
@@ -71,15 +50,13 @@ function Users() {
       return;
     }
 
-    const address = {
+    const newAddr = {
       id: Date.now(),
       ...newAddress
     };
 
-    const updatedAddresses = [...addresses, address];
+    const updatedAddresses = [...addresses, newAddr];
     setAddresses(updatedAddresses);
-    localStorage.setItem(`addresses_${loggedInUser.id}`, JSON.stringify(updatedAddresses));
-    
     setNewAddress({ street: "", city: "", state: "", zipCode: "", country: "" });
     setShowAddressForm(false);
     alert("Address added successfully!");
@@ -88,7 +65,6 @@ function Users() {
   const handleDeleteAddress = (id) => {
     const updatedAddresses = addresses.filter(addr => addr.id !== id);
     setAddresses(updatedAddresses);
-    localStorage.setItem(`addresses_${loggedInUser.id}`, JSON.stringify(updatedAddresses));
   };
 
   const handleLogout = () => {
