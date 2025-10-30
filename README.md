@@ -7,8 +7,8 @@ This project demonstrates a complete fashion shopping experience — from browsi
 
 ## 🖥️ Live Demo
 
-🚀 [View on Vercel](https://your-vercel-link.vercel.app)  
-*(replace with your actual deployed link after hosting)*
+🚀 [View on Vercel](fashion-e-commerce-app-rop6-fk8ccnmbl-abhinav-ps-projects.vercel.app)  
+
 
 ---
 
